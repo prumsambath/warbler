@@ -15,14 +15,37 @@ class AuthForm extends Component {
     this.setState({ [e.target.name]: e.target.value });
   };
 
+  handleSubmit = e => {
+    e.preventDefault();
+    const authType = this.props.signUp ? 'signup' : 'signin';
+    this.props.onAuth(authType, this.state).then(() => {
+      console.log('Log in successfully');
+    });
+  };
+
   render() {
     const { email, username, password, imageProfileUrl } = this.state;
-    const { buttonText, heading, signUp } = this.props;
+    const {
+      buttonText,
+      heading,
+      signUp,
+      error,
+      history,
+      removeError,
+    } = this.props;
+
+    history.listen(() => {
+      removeError();
+    });
+
     return (
       <div className="row justify-content-md-center text-center">
         <div className="col-md-6">
-          <form action={this.handleSubmit}>
+          <form onSubmit={this.handleSubmit}>
             <h2>{heading}</h2>
+            {error.message && (
+              <div className="alert alert-danger">{error.message}</div>
+            )}
             <label htmlFor="email">Email:</label>
             <input
               type="text"
@@ -62,6 +85,9 @@ class AuthForm extends Component {
                 />
               </div>
             )}
+            <button className="btn btn-primary btn-block btn-lg" type="submit">
+              {buttonText}
+            </button>
           </form>
         </div>
       </div>
