@@ -4,8 +4,19 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import { configStore } from '../store';
 import Navbar from './Navbar';
 import Main from './Main';
+import { setAuthorizationToken, setCurrentUser } from '../store/actions/auth';
+import jwtDecode from 'jwt-decode';
 
 const store = configStore();
+
+if (localStorage.jwtToken) {
+  setAuthorizationToken(localStorage.jwtToken);
+  try {
+    store.dispatch(setCurrentUser(jwtDecode(localStorage.jwtToken)));
+  } catch (err) {
+    store.dispatch(setCurrentUser({}));
+  }
+}
 
 const App = () => (
   <Provider store={store}>
