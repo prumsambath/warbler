@@ -4,7 +4,14 @@ import MessageTimeline from './MessageTimeLine';
 
 const Homepage = ({ currentUser }) => {
   if (currentUser.isAuthenticated) {
-    return <MessageTimeline />;
+    return (
+      <div>
+        <MessageTimeline
+          profileImageUrl={currentUser.profileImageUrl}
+          username={currentUser.username}
+        />
+      </div>
+    );
   } else {
     return (
       <div className="home-hero">
